@@ -89,6 +89,7 @@
    ;; Assignment
    :capture nodes/->Capture
    :assign nodes/->Assign
+   :render nodes/->Render
    :increment nodes/->Increment
    :decrement nodes/->Decrement
    ;; Conditions
