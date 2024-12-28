@@ -30,6 +30,8 @@
   Parent
   (children [_] [pred template]))
 
+(defrecord Comment [_body])
+
 (defrecord Continue [])
 
 (defrecord Decrement [var]

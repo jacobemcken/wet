@@ -112,6 +112,7 @@
    :for-reversed nodes/->ForReversed
    :break nodes/->Break
    :continue nodes/->Continue
+   :comment nodes/->Comment
    :range-start identity
    :range-end identity
    :range nodes/->IntRange
