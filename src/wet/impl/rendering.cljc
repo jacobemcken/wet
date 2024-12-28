@@ -3,13 +3,13 @@
             [wet.filters :as filters]
             [wet.impl.parser.nodes
              #?@(:cljs [:refer [Assertion Assign Break Capture Case CollIndex
-                                Continue Decrement Filter For If Increment
+                                Comment Continue Decrement Filter For If Increment
                                 Lookup ObjectExpr PredicateAnd PredicateOr
                                 IntRange Render Template Unless]])]
             [wet.impl.utils :as utils])
   #?(:clj (:import (wet.impl.parser.nodes
                      Assertion Assign Break Capture Case CollIndex
-                     Continue Decrement Filter For If Increment
+                     Comment Continue Decrement Filter For If Increment
                      Lookup ObjectExpr PredicateAnd PredicateOr
                      IntRange Render Template Unless))))
 
@@ -243,6 +243,10 @@
   (let [[template _] (eval-node (:template node) context)]
     (swap! (::global-scope context) assoc (:var node) template)
     ["" context]))
+
+(defmethod eval-node Comment
+  [_node context]
+  ["" context])
 
 (defmethod eval-node Increment
   [node context]

@@ -51,6 +51,7 @@
                      | break
                      | capture
                      | case
+                     | comment
                      | continue
                      | decrement
                      | for
@@ -60,6 +61,7 @@
                      | unless
 
   render ::= ltag <'render '> <s> string rtag
+  comment ::= ltag <'comment'> rtag body? ltag <'endcomment'> rtag
 
   (* VARIABLES *)
 

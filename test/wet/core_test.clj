@@ -139,6 +139,16 @@
                            "{{ x }}"
                            "{% endraw %}")))
 
+  (testing "comments" ; https://shopify.github.io/liquid/tags/template/#comment
+    (is (= "\n\nAnything you put between  tags\nis turned into a comment."
+           (render (str "{% assign verb = \"turned\" %}\n"
+                        "{% comment %}\n"
+                        "{% assign verb = \"converted\" %}\n"
+                        "{% endcomment %}\n"
+                        "Anything you put between {% comment %} and {% endcomment %} tags\n"
+                        "is {{ verb }} into a comment.")
+                   {:params {}}))))
+
   (testing "render"
     (is (= "Hello World!"
            (render "{{ greeting }} {% render \"x.html\" %}!"
