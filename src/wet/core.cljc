@@ -29,5 +29,6 @@
    (render transformed-template nil))
   ([transformed-template options]
    (let [context {:params (walk/stringify-keys (:params options))
-                  :filters (walk/stringify-keys (:filters options))}]
+                  :filters (walk/stringify-keys (:filters options))
+                  :templates (:templates options)}]
      (rendering/eval-template transformed-template context))))

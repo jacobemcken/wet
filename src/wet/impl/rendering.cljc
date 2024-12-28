@@ -5,13 +5,13 @@
              #?@(:cljs [:refer [Assertion Assign Break Capture Case CollIndex
                                 Continue Decrement Filter For If Increment
                                 Lookup ObjectExpr PredicateAnd PredicateOr
-                                IntRange Template Unless]])]
+                                IntRange Render Template Unless]])]
             [wet.impl.utils :as utils])
   #?(:clj (:import (wet.impl.parser.nodes
                      Assertion Assign Break Capture Case CollIndex
                      Continue Decrement Filter For If Increment
                      Lookup ObjectExpr PredicateAnd PredicateOr
-                     IntRange Template Unless))))
+                     IntRange Render Template Unless))))
 
 (declare eval-node)
 (declare resolve-lookup)
@@ -223,6 +223,14 @@
 (defmethod eval-node For
   [node context]
   [(eval-for node context) context])
+
+(defmethod eval-node Render
+  [node context]
+  (let [template-name (:template node)]
+    (if-let [transformed-template (get-in context [:templates template-name])]
+      [(first (eval-node transformed-template context)) context]
+      (throw (ex-info "Unknown template referenced"
+                      {:template-name template-name})))))
 
 (defmethod eval-node Assign
   [node context]

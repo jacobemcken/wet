@@ -56,7 +56,10 @@
                      | for
                      | if
                      | increment
+                     | render
                      | unless
+
+  render ::= ltag <'render '> <s> string rtag
 
   (* VARIABLES *)
 

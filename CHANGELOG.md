@@ -7,6 +7,11 @@ when either the major or minor version number changes,
 otherwise you are probably safe to update.
 
 
+## Unreleased
+
+* Add support for "render" tag
+
+
 ## 0.2.1 (2025-01-02)
 
 Only released to have a common reference point (code)

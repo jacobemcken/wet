@@ -88,6 +88,10 @@
   Parent
   (children [_] [start end]))
 
+(defrecord Render [template]
+  Parent
+  (children [_] [template]))
+
 (defrecord Template [nodes]
   Parent
   (children [_] nodes))

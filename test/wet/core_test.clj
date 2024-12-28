@@ -139,6 +139,18 @@
                            "{{ x }}"
                            "{% endraw %}")))
 
+  (testing "render"
+    (is (= "Hello World!"
+           (render "{{ greeting }} {% render \"x.html\" %}!"
+                   {:params {:greeting "Hello" :who "World"}
+                    :templates {"x.html" (core/parse "{{ who }}")}})))
+
+    ;; Code within rendered template should not have access to assigned variables
+    (is (= "World! No one"
+           (render "{% assign who = \"World\" %}{{ who }}!{% render \"x.html\" %}"
+                   {:params {}
+                    :templates {"x.html" (core/parse "{{ who }} No one")}}))))
+
   (testing "template analysis"
     (are [template expected]
       (->> template
