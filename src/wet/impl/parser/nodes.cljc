@@ -90,9 +90,9 @@
   Parent
   (children [_] [start end]))
 
-(defrecord Render [template]
+(defrecord Render [template params]
   Parent
-  (children [_] [template]))
+  (children [_] [template params]))
 
 (defrecord Template [nodes]
   Parent
