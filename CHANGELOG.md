@@ -10,7 +10,7 @@ otherwise you are probably safe to update.
 ## Unreleased
 
 * Add support for "comment" tag
-* Add support for "render" tag
+* Add support for "render" tag with params
 
 
 ## 0.2.1 (2025-01-02)

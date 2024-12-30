@@ -159,7 +159,14 @@
     (is (= "World! No one"
            (render "{% assign who = \"World\" %}{{ who }}!{% render \"x.html\" %}"
                    {:params {}
-                    :templates {"x.html" (core/parse "{{ who }} No one")}}))))
+                    :templates {"x.html" (core/parse "{{ who }} No one")}})))
+
+    ;; Notice how `foo` is being is being replaced by the template parameter
+    (is (= "\napples/oranges"
+           (render (str "{% assign my_variable = \"apples\" %}\n"
+                        "{% render \"x.html\", foo: my_variable, my_variable: \"oranges\" %}")
+                   {:params {:foo "bananas"}
+                    :templates {"x.html" (core/parse "{{ foo }}/{{ my_variable }}")}}))))
 
   (testing "template analysis"
     (are [template expected]

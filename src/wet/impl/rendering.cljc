@@ -224,11 +224,25 @@
   [node context]
   [(eval-for node context) context])
 
+(defn resolve-params
+  "Takes a list of 'node params' pepared by `parser/parse-params`.
+   Returns a (possibly nested) map of parameters, where references
+   have been realized into actual values (bool, int, string & objects)"
+  [node-params context]
+  (->> node-params
+       (map (fn [[k v]]
+              [k (resolve-object v context)]))
+       (into {})))
+
 (defmethod eval-node Render
   [node context]
   (let [template-name (:template node)]
     (if-let [transformed-template (get-in context [:templates template-name])]
-      [(first (eval-node transformed-template context)) context]
+      (let [new-context (-> context
+                            (select-keys [:filters :params :templates])
+                            (assoc ::global-scope (atom {}))
+                            (update :params merge (resolve-params (:params node) context)))]
+        [(first (eval-node transformed-template new-context)) context])
       (throw (ex-info "Unknown template referenced"
                       {:template-name template-name})))))
 

@@ -49,6 +49,9 @@
 
 (defn- parse-filter [name & args] (nodes/->Filter name args))
 
+(defn- parse-params [& params]
+  (apply hash-map params))
+
 (defn- parse-for-opts
   [& nodes]
   (letfn [(find-node [t] (first (filter (partial instance? t) nodes)))]
@@ -85,6 +88,7 @@
    :lookup parse-lookup
    :object-expr parse-object-expr
    :filter parse-filter
+   :params parse-params
    :index nodes/->CollIndex
    ;; Assignment
    :capture nodes/->Capture
