@@ -60,7 +60,9 @@
                      | render
                      | unless
 
-  render ::= ltag <'render '> <s> string rtag
+  (* TEMPLATES *)
+  params ::= (<s> <','> <s> token <':'> <s> object)*
+  render ::= ltag <'render '> <s> string params rtag
   comment ::= ltag <'comment'> rtag body? ltag <'endcomment'> rtag
 
   (* VARIABLES *)
