@@ -77,10 +77,11 @@
   (* PREDICATES *)
 
   operator ::= '==' | '!=' | '>' | '<' | '>=' | '<=' | 'contains'
+  empty ::= <'empty'>
 
   or_  ::= <s> 'or' <s>
   and_ ::= <s> 'and' <s>
-  assertion ::= object | object <s> operator <s> object
+  assertion ::= object | object <s> operator <s> (empty / object)
   or ::= and (<or_> and)*
   and ::= predicate (<and_> predicate)*
   predicate ::= or | <lparen> or <rparen> | assertion
