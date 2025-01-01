@@ -3,13 +3,13 @@
             [wet.filters :as filters]
             [wet.impl.parser.nodes
              #?@(:cljs [:refer [Assertion Assign Break Capture Case CollIndex
-                                Comment Continue Decrement Filter For If Increment
+                                Comment Continue Decrement EmptyDrop Filter For If Increment
                                 Lookup ObjectExpr PredicateAnd PredicateOr
                                 IntRange Render Template Unless]])]
             [wet.impl.utils :as utils])
   #?(:clj (:import (wet.impl.parser.nodes
                      Assertion Assign Break Capture Case CollIndex
-                     Comment Continue Decrement Filter For If Increment
+                     Comment Continue Decrement EmptyDrop Filter For If Increment
                      Lookup ObjectExpr PredicateAnd PredicateOr
                      IntRange Render Template Unless))))
 
@@ -33,7 +33,8 @@
   [node context]
   (if-let [resolver (cond
                       (instance? Lookup node) resolve-lookup
-                      (instance? IntRange node) resolve-range)]
+                      (instance? IntRange node) resolve-range
+                      (instance? EmptyDrop node) (fn [_ _] ::empty))]
     (resolver node context)
     node))
 
@@ -92,7 +93,9 @@
   (let [{:keys [operator operands]} node
         operands* (map #(resolve-object % context) operands)]
     (case operator
-      "==" (apply = operands*)
+      "==" (if (= ::empty (second operands*))
+             (empty? (first operands*))
+             (apply = operands*))
       "!=" (apply not= operands*)
       "contains" (cond
                    (every? string? operands*)

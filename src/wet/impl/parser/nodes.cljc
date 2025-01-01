@@ -34,6 +34,8 @@
 
 (defrecord Continue [])
 
+(defrecord EmptyDrop [])
+
 (defrecord Decrement [var]
   Parent
   (children [_] [var]))

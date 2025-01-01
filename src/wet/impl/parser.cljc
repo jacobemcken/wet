@@ -84,6 +84,7 @@
    :dq-str-set identity
    :dq-str-escape read-string*
    :string parse-string
+   :empty nodes/->EmptyDrop
    ;; Lookup
    :lookup parse-lookup
    :object-expr parse-object-expr

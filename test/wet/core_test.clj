@@ -78,6 +78,20 @@
                 "{% when 42 %}"
                 "ok"
                 "{% endcase %}")
+      "ok" (str "{% if \"\" == empty %}"
+                "ok"
+                "{% else %}"
+                "not ok"
+                "{% endif %}")
+      ;; split in Ruby works differently, this workaround creates an empty collection
+      ;; map: "non-existing" removes the empty string inside col
+      "ok" (str "{% assign coll = \"\" | split: \",\" | map: \"non-existing\" %}"
+                "{% if coll == empty %}"
+                "ok"
+                "{% else %}"
+                "not ok"
+                "{% endif %}")
+
       "a = 52" (str "{% case a %}"
                     "{% when 41 %}"
                     "not ok"

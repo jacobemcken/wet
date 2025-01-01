@@ -9,6 +9,7 @@ otherwise you are probably safe to update.
 
 ## Unreleased
 
+* Add support for 'EmptyDrop' objects when asserting
 * Add support for "comment" tag
 * Add support for "render" tag with params
 
