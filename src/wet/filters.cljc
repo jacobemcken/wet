@@ -1,5 +1,5 @@
 (ns wet.filters
-  (:refer-clojure :exclude [first last map remove replace reverse sort])
+  (:refer-clojure :exclude [abs first last map remove replace reverse sort])
   (:require [clojure.string :as str]
             [clojure.walk :as walk]
             [wet.impl.utils :as utils])
@@ -12,8 +12,8 @@
   (some-> v utils/safe-num Math/abs))
 
 (defn append
-  [v & args]
   "Concatenates two strings and returns the concatenated value."
+  [v & args]
   (apply (partial str v) args))
 
 (defn capitalize

@@ -1,5 +1,6 @@
 (ns wet.core-test
-  (:require [clojure.test :refer :all]
+  (:require [clojure.test :refer [are deftest is testing]]
+            [wet.core :as core]
             [wet.impl.parser :as parser]
             [wet.test-utils :refer [render]]))
 

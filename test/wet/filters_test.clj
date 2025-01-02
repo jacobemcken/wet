@@ -1,5 +1,5 @@
 (ns wet.filters-test
-  (:require [clojure.test :refer :all]
+  (:require [clojure.test :refer [are deftest is testing]]
             [wet.test-utils :refer [render]])
   (:import (java.util Date)))
 
