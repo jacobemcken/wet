@@ -5,6 +5,7 @@ built on top of [Instaparse](https://github.com/Engelberg/instaparse).
 
 Was forked from https://github.com/flocktory/wet
 
+
 ## Installation
 
 ### Leiningen/Boot
@@ -19,6 +20,7 @@ Was forked from https://github.com/flocktory/wet
 {:deps {dk.emcken/wet {:mvn/version "0.2.1"}}}
 ```
 
+
 ## Usage
 
 In the vein of the [original library](https://github.com/Shopify/liquid),
@@ -31,6 +33,7 @@ is the only namespace you are going to need.
 ```clojure
 (:require [wet.core :as wet])
 ```
+
 
 ### An example
 
@@ -87,7 +90,8 @@ Finally, obtain the rendered result:
 The complete list of core Liquid filters can be found in
 [`wet.filters`](https://github.com/jacobemcken/wet/blob/master/src/wet/filters.cljc).
 
+
 ## Thanks
 
-[Aleksey Burlak](https://github.com/leshaburlak)
-[Aleksey Kuleshov](https://github.com/superkonduktr)
+- [Aleksey Burlak](https://github.com/leshaburlak)
+- [Aleksey Kuleshov](https://github.com/superkonduktr)
