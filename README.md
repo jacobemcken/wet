@@ -25,7 +25,7 @@ In the vein of the [original library](https://github.com/Shopify/liquid),
 wet provides a minimalistic interface comprising `parse` and `render` functions.
 Calling wet from Clojure and ClojureScript is completely identical.
 
-[`wet.core`](https://github.com/dk.emcken/wet/blob/master/src/wet/core.cljc)
+[`wet.core`](https://github.com/jacobemcken/wet/blob/master/src/wet/core.cljc)
 is the only namespace you are going to need.
 
 ```clojure
@@ -85,7 +85,7 @@ Finally, obtain the rendered result:
 ```
 
 The complete list of core Liquid filters can be found in
-[`wet.filters`](https://github.com/dk.emcken/wet/blob/master/src/wet/filters.cljc).
+[`wet.filters`](https://github.com/jacobemcken/wet/blob/master/src/wet/filters.cljc).
 
 ## Thanks
 
