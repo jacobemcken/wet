@@ -49,6 +49,9 @@
 
 (defn- parse-filter [name & args] (nodes/->Filter name args))
 
+(defn- parse-params [& params]
+  (apply hash-map params))
+
 (defn- parse-for-opts
   [& nodes]
   (letfn [(find-node [t] (first (filter (partial instance? t) nodes)))]
@@ -81,14 +84,17 @@
    :dq-str-set identity
    :dq-str-escape read-string*
    :string parse-string
+   :empty nodes/->EmptyDrop
    ;; Lookup
    :lookup parse-lookup
    :object-expr parse-object-expr
    :filter parse-filter
+   :params parse-params
    :index nodes/->CollIndex
    ;; Assignment
    :capture nodes/->Capture
    :assign nodes/->Assign
+   :render nodes/->Render
    :increment nodes/->Increment
    :decrement nodes/->Decrement
    ;; Conditions
@@ -111,6 +117,7 @@
    :for-reversed nodes/->ForReversed
    :break nodes/->Break
    :continue nodes/->Continue
+   :comment nodes/->Comment
    :range-start identity
    :range-end identity
    :range nodes/->IntRange

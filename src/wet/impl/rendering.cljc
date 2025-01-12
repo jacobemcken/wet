@@ -3,15 +3,15 @@
             [wet.filters :as filters]
             [wet.impl.parser.nodes
              #?@(:cljs [:refer [Assertion Assign Break Capture Case CollIndex
-                                Continue Decrement Filter For If Increment
+                                Comment Continue Decrement EmptyDrop Filter For If Increment
                                 Lookup ObjectExpr PredicateAnd PredicateOr
-                                IntRange Template Unless]])]
+                                IntRange Render Template Unless]])]
             [wet.impl.utils :as utils])
   #?(:clj (:import (wet.impl.parser.nodes
                      Assertion Assign Break Capture Case CollIndex
-                     Continue Decrement Filter For If Increment
+                     Comment Continue Decrement EmptyDrop Filter For If Increment
                      Lookup ObjectExpr PredicateAnd PredicateOr
-                     IntRange Template Unless))))
+                     IntRange Render Template Unless))))
 
 (declare eval-node)
 (declare resolve-lookup)
@@ -33,7 +33,8 @@
   [node context]
   (if-let [resolver (cond
                       (instance? Lookup node) resolve-lookup
-                      (instance? IntRange node) resolve-range)]
+                      (instance? IntRange node) resolve-range
+                      (instance? EmptyDrop node) (fn [_ _] ::empty))]
     (resolver node context)
     node))
 
@@ -92,7 +93,9 @@
   (let [{:keys [operator operands]} node
         operands* (map #(resolve-object % context) operands)]
     (case operator
-      "==" (apply = operands*)
+      "==" (if (= ::empty (second operands*))
+             (empty? (first operands*))
+             (apply = operands*))
       "!=" (apply not= operands*)
       "contains" (cond
                    (every? string? operands*)
@@ -224,6 +227,28 @@
   [node context]
   [(eval-for node context) context])
 
+(defn resolve-params
+  "Takes a list of 'node params' pepared by `parser/parse-params`.
+   Returns a (possibly nested) map of parameters, where references
+   have been realized into actual values (bool, int, string & objects)"
+  [node-params context]
+  (->> node-params
+       (map (fn [[k v]]
+              [k (resolve-object v context)]))
+       (into {})))
+
+(defmethod eval-node Render
+  [node context]
+  (let [template-name (:template node)]
+    (if-let [transformed-template (get-in context [:templates template-name :body])]
+      (let [new-context (-> context
+                            (select-keys [:filters :params :templates])
+                            (assoc ::global-scope (atom {}))
+                            (update :params merge (resolve-params (:params node) context)))]
+        [(first (eval-node transformed-template new-context)) context])
+      (throw (ex-info "Unknown template referenced"
+                      {:template-name template-name})))))
+
 (defmethod eval-node Assign
   [node context]
   (let [[v _] (eval-node (:value node) context)]
@@ -235,6 +260,10 @@
   (let [[template _] (eval-node (:template node) context)]
     (swap! (::global-scope context) assoc (:var node) template)
     ["" context]))
+
+(defmethod eval-node Comment
+  [_node context]
+  ["" context])
 
 (defmethod eval-node Increment
   [node context]

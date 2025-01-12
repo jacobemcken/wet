@@ -78,6 +78,20 @@
                 "{% when 42 %}"
                 "ok"
                 "{% endcase %}")
+      "ok" (str "{% if \"\" == empty %}"
+                "ok"
+                "{% else %}"
+                "not ok"
+                "{% endif %}")
+      ;; split in Ruby works differently, this workaround creates an empty collection
+      ;; map: "non-existing" removes the empty string inside col
+      "ok" (str "{% assign coll = \"\" | split: \",\" | map: \"non-existing\" %}"
+                "{% if coll == empty %}"
+                "ok"
+                "{% else %}"
+                "not ok"
+                "{% endif %}")
+
       "a = 52" (str "{% case a %}"
                     "{% when 41 %}"
                     "not ok"
@@ -138,6 +152,35 @@
                            "{% raw %}"
                            "{{ x }}"
                            "{% endraw %}")))
+
+  (testing "comments" ; https://shopify.github.io/liquid/tags/template/#comment
+    (is (= "\n\nAnything you put between  tags\nis turned into a comment."
+           (render (str "{% assign verb = \"turned\" %}\n"
+                        "{% comment %}\n"
+                        "{% assign verb = \"converted\" %}\n"
+                        "{% endcomment %}\n"
+                        "Anything you put between {% comment %} and {% endcomment %} tags\n"
+                        "is {{ verb }} into a comment.")
+                   {:params {}}))))
+
+  (testing "render"
+    (is (= "Hello World!"
+           (render "{{ greeting }} {% render \"x.html\" %}!"
+                   {:params {:greeting "Hello" :who "World"}
+                    :templates {"x.html" {:body (core/parse "{{ who }}")}}})))
+
+    ;; Code within rendered template should not have access to assigned variables
+    (is (= "World! No one"
+           (render "{% assign who = \"World\" %}{{ who }}!{% render \"x.html\" %}"
+                   {:params {}
+                    :templates {"x.html" {:body (core/parse "{{ who }} No one")}}})))
+
+    ;; Notice how `foo` is being is being replaced by the template parameter
+    (is (= "\napples/oranges"
+           (render (str "{% assign my_variable = \"apples\" %}\n"
+                        "{% render \"x.html\", foo: my_variable, my_variable: \"oranges\" %}")
+                   {:params {:foo "bananas"}
+                    :templates {"x.html" {:body (core/parse "{{ foo }}/{{ my_variable }}")}}}))))
 
   (testing "template analysis"
     (are [template expected]

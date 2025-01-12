@@ -30,7 +30,11 @@
   Parent
   (children [_] [pred template]))
 
+(defrecord Comment [_body])
+
 (defrecord Continue [])
+
+(defrecord EmptyDrop [])
 
 (defrecord Decrement [var]
   Parent
@@ -87,6 +91,10 @@
 (defrecord IntRange [start end]
   Parent
   (children [_] [start end]))
+
+(defrecord Render [template params]
+  Parent
+  (children [_] [template params]))
 
 (defrecord Template [nodes]
   Parent
