@@ -51,12 +51,19 @@
                      | break
                      | capture
                      | case
+                     | comment
                      | continue
                      | decrement
                      | for
                      | if
                      | increment
+                     | render
                      | unless
+
+  (* TEMPLATES *)
+  params ::= (<s> <','> <s> token <':'> <s> object)*
+  render ::= ltag <'render '> <s> string params rtag
+  comment ::= ltag <'comment'> rtag body? ltag <'endcomment'> rtag
 
   (* VARIABLES *)
 
@@ -70,10 +77,11 @@
   (* PREDICATES *)
 
   operator ::= '==' | '!=' | '>' | '<' | '>=' | '<=' | 'contains'
+  empty ::= <'empty'>
 
   or_  ::= <s> 'or' <s>
   and_ ::= <s> 'and' <s>
-  assertion ::= object | object <s> operator <s> object
+  assertion ::= object | object <s> operator <s> (empty / object)
   or ::= and (<or_> and)*
   and ::= predicate (<and_> predicate)*
   predicate ::= or | <lparen> or <rparen> | assertion
