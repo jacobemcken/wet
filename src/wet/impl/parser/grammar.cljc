@@ -3,12 +3,14 @@
 (def GRAMMAR "
   (* COMMON *)
 
-  template ::= (b / raw-block / object-expr-block / tag-expression)*
+  template ::= (b / raw-block / object-expr-block / ltag tag-expression rtag)*
   <body> ::= template
   b ::= #'(?s)((?!\\{\\{|\\{\\%).)*'
   s ::= #'[\\s\\n\\r]*'
-  <ltag> ::= <'{%'> <s>
-  <rtag> ::= <s> <'%}'>
+  trimbackward ::= <'-'>
+  trimforward ::= <'-'>
+  <ltag> ::= <'{%'> trimbackward? <s>
+  <rtag> ::= <s> trimforward? <'%}'>
   dquote ::= '\"'
   squote ::= '\\''
   <lparen> ::= <s> '(' <s>
@@ -42,7 +44,7 @@
   <object> ::= bool / int / float / string / lookup
 
   object-expr ::= <s> object <s> filter* <s>
-  <object-expr-block> ::= <'{{'> object-expr <'}}'>
+  <object-expr-block> ::= <'{{'> trimbackward? object-expr trimforward? <'}}'>
 
   filter ::= <'|'> <s> (token | token <s> <':'> <s> args) <s>
   <args> ::= object (<s> <','> <s> object)*
@@ -62,17 +64,17 @@
 
   (* TEMPLATES *)
   params ::= (<s> <','> <s> token <':'> <s> object)*
-  render ::= ltag <'render '> <s> string params rtag
-  comment ::= ltag <'comment'> rtag body? ltag <'endcomment'> rtag
+  render ::= <'render '> <s> string params
+  comment ::= <'comment'> rtag body? ltag <'endcomment'>
 
   (* VARIABLES *)
 
-  assign ::= ltag <'assign '> <s> token <s> <'='> <s> object-expr <s> rtag
-  increment ::= ltag <'increment '> <s> token rtag
-  decrement ::= ltag <'decrement '> <s> token rtag
-  capture ::= ltag <'capture '> <s> token rtag
+  assign ::= <'assign '> <s> token <s> <'='> <s> object-expr
+  increment ::= <'increment '> <s> token
+  decrement ::= <'decrement '> <s> token
+  capture ::= <'capture '> <s> token rtag
               body
-              ltag <'endcapture'> rtag
+              ltag <'endcapture'>
 
   (* PREDICATES *)
 
@@ -88,17 +90,17 @@
 
   (* CONTROL FLOW *)
 
-  case ::= ltag <'case '> object rtag when+ else? ltag <'endcase'> rtag
-  if ::= ltag <'if '> <s> predicate rtag body elsif* else? ltag <'endif'> rtag
-  unless ::= ltag <'unless '> <s> predicate rtag body elsif* else? ltag <'endunless'> rtag
+  case ::= <'case '> object rtag when+ else? ltag <'endcase'>
+  if ::= <'if '> <s> predicate rtag body elsif* else? ltag <'endif'>
+  unless ::= <'unless '> <s> predicate rtag body elsif* else? ltag <'endunless'>
   elsif ::= ltag <'elsif '> <s> predicate rtag body
   when ::= ltag <'when '> object rtag body
   else ::= ltag <'else '> <s> rtag body
 
   (* ITERATION *)
 
-  break ::= ltag <'break'> rtag
-  continue ::= ltag <'continue'> rtag
+  break ::= <'break'>
+  continue ::= <'continue'>
 
   range-start ::= int | lookup
   range-end ::= int | lookup
@@ -109,8 +111,8 @@
   for-reversed ::= <s> <'reversed'> <s>
   for-opts ::= (for-limit |for-offset | for-limit for-offset | for-offset for-limit)? for-reversed?
 
-  for ::= ltag <'for '> token <s> <'in '> (object / range) for-opts?
+  for ::= <'for '> token <s> <'in '> (object / range) for-opts?
           rtag
           body
-          ltag <'endfor'> rtag
+          ltag <'endfor'>
 ")
