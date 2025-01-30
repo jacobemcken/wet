@@ -75,6 +75,8 @@
 (def ^:private transformer
   {:template parse-template
    :b identity
+   :trimbackward (partial nodes/->Trim "backward")
+   :trimforward (partial nodes/->Trim "forward")
    ;; Data types
    :int read-string*
    :float read-string*
