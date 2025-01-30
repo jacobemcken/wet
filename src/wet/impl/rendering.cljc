@@ -200,12 +200,12 @@
 
 (defmethod eval-node Template
   [node context]
-  (reduce
-    (fn [[res context*] node]
-      (let [[node* context**] (eval-node node context*)]
-        [(str res node*) context**]))
-    ["" context]
-    (:nodes node)))
+  (loop [nodes (:nodes node)
+         res ""]
+    (if-let [node (first nodes)]
+      (let [[res* _] (eval-node node context)]
+        (recur (rest nodes) (str res res*)))
+      [res context])))
 
 (defmethod eval-node ObjectExpr
   [node context]
