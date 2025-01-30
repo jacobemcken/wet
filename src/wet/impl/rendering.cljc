@@ -1,17 +1,18 @@
 (ns wet.impl.rendering
   (:require [clojure.walk :as walk]
+            [clojure.string :as str]
             [wet.filters :as filters]
             [wet.impl.parser.nodes
              #?@(:cljs [:refer [Assertion Assign Break Capture Case CollIndex
                                 Comment Continue Decrement EmptyDrop Filter For If Increment
                                 Lookup ObjectExpr PredicateAnd PredicateOr
-                                IntRange Render Template Unless]])]
+                                IntRange Render Template Trim Unless]])]
             [wet.impl.utils :as utils])
   #?(:clj (:import (wet.impl.parser.nodes
                      Assertion Assign Break Capture Case CollIndex
                      Comment Continue Decrement EmptyDrop Filter For If Increment
                      Lookup ObjectExpr PredicateAnd PredicateOr
-                     IntRange Render Template Unless))))
+                     IntRange Render Template Trim Unless))))
 
 (declare eval-node)
 (declare resolve-lookup)
@@ -201,11 +202,25 @@
 (defmethod eval-node Template
   [node context]
   (loop [nodes (:nodes node)
-         res ""]
+         res ""
+         manipulate nil]
     (if-let [node (first nodes)]
-      (let [[res* _] (eval-node node context)]
-        (recur (rest nodes) (str res res*)))
+      (let [[res* _ next-manipulate] (eval-node node context)]
+        (recur (rest nodes)
+               (cond->> [res res*]
+                 manipulate manipulate
+                 :always (apply str))
+               next-manipulate))
       [res context])))
+
+(defmethod eval-node Trim
+  [node context]
+  ["" context (fn strip-whitespace
+                [[a b]]
+                (println (:direction node))
+                (if (= "backward" (:direction node))
+                  [(str/trimr a) b]
+                  [a (str/triml b)]))])
 
 (defmethod eval-node ObjectExpr
   [node context]
