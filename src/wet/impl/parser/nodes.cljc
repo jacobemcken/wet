@@ -12,6 +12,10 @@
   Parent
   (children [_] [value]))
 
+(defrecord Trim [direction]
+  Parent
+  (children [_] [direction]))
+
 (defrecord Break [])
 
 (defrecord Capture [var template]
