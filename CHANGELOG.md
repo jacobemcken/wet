@@ -7,7 +7,7 @@ when either the major or minor version number changes,
 otherwise you are probably safe to update.
 
 
-## Unreleased
+## 0.3.0 (2025-03-13)
 
 * Add support for 'EmptyDrop' objects when asserting
 * Add support for "comment" tag
