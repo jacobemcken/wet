@@ -8,17 +8,9 @@ Was forked from https://github.com/flocktory/wet
 
 ## Installation
 
-### Leiningen/Boot
+Include the dependency in your project:
 
-```
-[dk.emcken/wet "0.2.1"]
-```
-
-### CLI
-
-```clojure
-{:deps {dk.emcken/wet {:mvn/version "0.2.1"}}}
-```
+[![Clojars Project](https://img.shields.io/clojars/v/dk.emcken/wet.svg)](https://clojars.org/dk.emcken/wet)
 
 
 ## Usage
