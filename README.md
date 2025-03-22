@@ -3,6 +3,8 @@
 Wet is a pure Clojure/ClojureScript port of the [Liquid template language](https://shopify.github.io/liquid/)
 built on top of [Instaparse](https://github.com/Engelberg/instaparse).
 
+[![bb compatible](https://raw.githubusercontent.com/babashka/babashka/master/logo/badge.svg)](https://book.babashka.org#badges)
+
 Was forked from https://github.com/flocktory/wet
 
 
