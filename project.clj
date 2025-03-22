@@ -1,4 +1,4 @@
-(defproject dk.emcken/wet "0.3.1-SNAPSHOT"
+(defproject dk.emcken/wet "0.3.1"
   :description "Wet is a Liquid template language implementation in Clojure"
   :url "https://github.com/jacobemcken/wet"
   :license {:name "Eclipse Public License"

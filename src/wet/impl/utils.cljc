@@ -1,5 +1,6 @@
 (ns wet.impl.utils
-  #?(:clj (:import (java.util Date))))
+  #?(:clj (:import (java.util Date)
+                   (java.time Instant))))
 
 #?(:cljs (defn- non-NaN [v] (when-not (js/isNaN v) v)))
 
@@ -37,6 +38,9 @@
          :cljs js/Date)
       v)
     v
+
+    #?(:clj (instance? Instant v))
+    #?(:clj (Date/from v))
 
     (= "now" v)
     #?(:clj (Date.)

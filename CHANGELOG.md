@@ -7,6 +7,11 @@ when either the major or minor version number changes,
 otherwise you are probably safe to update.
 
 
+## 0.3.1 (2025-03-22)
+
+* Add support for `java.time.Instant` for `date` filters
+
+
 ## 0.3.0 (2025-03-13)
 
 * Add support for 'EmptyDrop' objects when asserting
